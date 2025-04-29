@@ -9,7 +9,7 @@ import {
   ChipsDirective,
   ChipDirective,
 } from "@syncfusion/ej2-react-buttons";
-import { allTrips, interests, travelStyles } from "~/constants";
+import { interests } from "~/constants";
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { tripId } = params;

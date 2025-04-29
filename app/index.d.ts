@@ -74,14 +74,14 @@ declare interface Trip {
   payment_link: string;
 }
 
-declare interface TripCardProps {
+type TripCardProps = {
   id: string;
-  name: string;
-  location: string;
+  name?: string;
   imageUrl: string;
-  tags: string[];
-  price: string;
-}
+  location: string;
+  tags?: (string | undefined)[];
+  price?: string;
+};
 
 declare interface StatsCard {
   headerTitle: string;

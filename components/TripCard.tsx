@@ -1,4 +1,3 @@
-import React from "react";
 import { Link, useLocation } from "react-router";
 import {
   ChipDirective,
@@ -15,6 +14,8 @@ const TripCard = ({
   tags,
   price,
 }: TripCardProps) => {
+  console.log("TripCard props:", { id, name, location, tags, price });
+
   const path = useLocation();
 
   return (
@@ -27,6 +28,7 @@ const TripCard = ({
       className="trip-card"
     >
       <img src={imageUrl} alt={name} />
+
       <article>
         <h2>{name}</h2>
         <figure>
@@ -42,7 +44,7 @@ const TripCard = ({
       <div className="mt-5 pl-[18px] pr-3.5 pb-5">
         <ChipListComponent id="travel-chip">
           <ChipsDirective>
-            {tags.map((tag, index) => (
+            {tags?.map((tag, index) => (
               <ChipDirective
                 key={index}
                 text={getFirstWord(tag)}
@@ -61,5 +63,4 @@ const TripCard = ({
     </Link>
   );
 };
-
 export default TripCard;

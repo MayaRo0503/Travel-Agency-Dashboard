@@ -25,7 +25,6 @@ import {
   Inject,
 } from "@syncfusion/ej2-react-grids";
 import { tripXAxis, tripyAxis, userXAxis, useryAxis } from "~/constants";
-import { redirect } from "react-router";
 
 export const clientLoader = async () => {
   const [
@@ -36,22 +35,22 @@ export const clientLoader = async () => {
     tripsByTravelStyle,
     allUsers,
   ] = await Promise.all([
-    getUser(),
-    getUsersAndTripsStats(),
-    getAllTrips(4, 0),
-    getUserGrowthPerDay(),
-    getTripsByTravelStyle(),
-    getAllUsers(4, 0),
+    await getUser(),
+    await getUsersAndTripsStats(),
+    await getAllTrips(4, 0),
+    await getUserGrowthPerDay(),
+    await getTripsByTravelStyle(),
+    await getAllUsers(4, 0),
   ]);
 
   console.log("raw tripsResponse:", tripsResponse);
   console.log("raw tripsByTravelStyle:", tripsByTravelStyle);
 
   const allTrips = tripsResponse.allTrips.map(
-    ({ $id, tripDetails, imageUrls }) => {
+    ({ $id, tripDetail, imageUrls }) => {
       const parsed = {
         id: $id,
-        ...parseTripData(tripDetails),
+        ...parseTripData(tripDetail),
         imageUrls: imageUrls ?? [],
       };
       console.log("mapped trip in loader:", parsed);
@@ -59,9 +58,13 @@ export const clientLoader = async () => {
     }
   );
 
-  // שימו לב: console.log ב־loader יופיע בשרת/קונסול התסריט
-  console.log("allTrips after mapping:", allTrips);
-
+  {
+    /*
+    map where we get a individual user and for each one we automatically return an object
+    => ({}) ----> will give us an object
+    js tip.
+    */
+  }
   const mappedUsers: UsersItineraryCount[] = allUsers.users.map((user) => ({
     imageUrl: user.imageUrl,
     name: user.name,
@@ -141,11 +144,11 @@ const Dashboard = ({ loaderData }: Route.ComponentProps) => {
             <TripCard
               key={trip.id}
               id={trip.id.toString()}
-              name={trip.name!}
+              name={trip.name!} // the '!' is because we know it will be there
               imageUrl={trip.imageUrls[0]}
               location={trip.itinerary?.[0]?.location ?? ""}
-              tags={[trip.interests!, trip.travelStyle!]}
-              price={trip.estimatedPrice!}
+              tags={[trip.interests!, trip.travelStyle!]} // the '!' is because we know it will be there
+              price={trip.estimatedPrice!} // the '!' is because we know it will be there
             />
           ))}
         </div>

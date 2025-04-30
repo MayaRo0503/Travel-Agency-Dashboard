@@ -24,7 +24,7 @@ export const getTripById = async (tripId: string) => {
     tripId
   );
   if (!trip.$id) {
-    console.log("Trip no found");
+    console.log("Trip not found");
     return null;
   }
   return trip;

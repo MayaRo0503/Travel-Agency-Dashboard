@@ -10,11 +10,19 @@ import {
   ChipDirective,
 } from "@syncfusion/ej2-react-buttons";
 import { interests } from "~/constants";
-
+{
+  /*
+ the params will be whatever is dynamic.
+ so in this case...
+ :id -> params.id -> 123
+ so we can extract that number.*/
+}
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { tripId } = params;
+
   if (!tripId) throw new Error("Trip ID is required");
 
+  // if theres is a trip so we can fetch it like that:
   const [trip, trips] = await Promise.all([
     getTripById(tripId),
     getAllTrips(4, 0),
@@ -22,9 +30,9 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 
   return {
     trip,
-    allTrips: trips.allTrips.map(({ $id, TripDetail, imageUrls }) => ({
+    allTrips: trips.allTrips.map(({ $id, tripDetail, imageUrls }) => ({
       id: $id,
-      ...parseTripData(TripDetail),
+      ...parseTripData(tripDetail),
       imageUrls: imageUrls ?? [],
     })),
   };
@@ -32,9 +40,8 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 
 const TripDetail = ({ loaderData }: Route.ComponentProps) => {
   const trip = loaderData.trip!;
-  const imageUrls = trip.imageUrls || [];
-  const tripData = parseTripData(trip.tripDetail);
-  console.log(loaderData);
+  const imageUrls = loaderData?.trip?.imageUrls || []; // separate property under this trips -> in the DB the imageUrls and the tripDetail they separate
+  const tripData = parseTripData(loaderData?.trip?.tripDetail); // extract to actual data
 
   const {
     name,
@@ -53,9 +60,9 @@ const TripDetail = ({ loaderData }: Route.ComponentProps) => {
   const allTrips = loaderData.allTrips as Trip[] | [];
 
   const pillItems = [
-    { text: travelStyle ?? "", bg: "!bg-pink-50 !text-pink-500" },
-    { text: groupType ?? "", bg: "!bg-primary-50 !text-primary-500" },
-    { text: budget ?? "", bg: "!bg-success-50 !text-success-700" },
+    { text: travelStyle, bg: "!bg-pink-50 !text-pink-500" },
+    { text: groupType, bg: "!bg-primary-50 !text-primary-500" },
+    { text: budget, bg: "!bg-success-50 !text-success-700" },
     {
       text: Array.isArray(interests) ? interests[0] : interests ?? "",
       bg: "!bg-navy-50 !text-navy-500",
@@ -77,6 +84,7 @@ const TripDetail = ({ loaderData }: Route.ComponentProps) => {
       <section className="container wrapper-md">
         <header>
           <h1 className="p-40-semibold text-dark-100">{name}</h1>
+          {/* this div: info-pill one next to another */}
           <div className="flex items-center gap-5">
             <InfoPill
               text={`${duration} day plan`}
@@ -204,18 +212,15 @@ const TripDetail = ({ loaderData }: Route.ComponentProps) => {
         <h2 className="p-24-semibold text-dark-100">Popular Trips</h2>
 
         <div className="trip-grid">
-          {allTrips.map(({ id, imageUrls }) => (
+          {allTrips.map((trip) => (
             <TripCard
-              key={tripData?.id}
-              id={id.toString()}
-              name={tripData?.name}
-              imageUrl={imageUrls[0]}
-              location={tripData?.itinerary?.[0]?.location ?? ""}
-              tags={[
-                tripData?.interests ?? "", // אם interests הוא undefined => ""
-                tripData?.travelStyle ?? "",
-              ]}
-              price={tripData?.estimatedPrice}
+              key={trip.id}
+              id={trip.id}
+              name={trip.name}
+              imageUrl={trip.imageUrls[0]}
+              location={trip.itinerary?.[0]?.location ?? ""}
+              tags={[trip.interests, trip.travelStyle]}
+              price={trip.estimatedPrice}
             />
           ))}
         </div>

@@ -14,8 +14,6 @@ const TripCard = ({
   tags,
   price,
 }: TripCardProps) => {
-  console.log("TripCard props:", { id, name, location, tags, price });
-
   const path = useLocation();
 
   return (

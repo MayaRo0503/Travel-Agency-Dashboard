@@ -181,8 +181,6 @@ TRAVEL-AGENCY
 
 ## 🙏 Credits
 
-Just paste that into your README under a new **Architecture** heading. Adjust any folder or file names to match your exact layout.
-
 This project was inspired by and developed with guidance from the following resources:
 
 - **JavaScript Mastery Tutorial:** [Build and Deploy a Full Stack React Admin Dashboard for a Travel Agency](https://www.youtube.com/watch?v=xZ1ba-RLrjo) – *A comprehensive YouTube tutorial that formed the foundation of this project.*
